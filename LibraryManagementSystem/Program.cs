@@ -22,41 +22,82 @@
 
         public void BorrowBook(string bookName)
         {
+            bool foundTheBook = false;
             for (int i = 0; i < LibraryList.Count; i++)
             {
-                if (LibraryList[i].Title == bookName)
-                {
-                    LibraryList[i].Availability = false;
-                }
 
+                if (LibraryList[i].Title.Contains(bookName))
+                {
+                    if (LibraryList[i].Availability)
+                    {
+                        LibraryList[i].Availability = false;
+                        Console.WriteLine($"Book '{LibraryList[i].Title}' has been borrowed.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Book '{LibraryList[i].Title}' is already borrowed.");
+                    }
+
+                    foundTheBook = true;
+                    break;
+                }
             }
+
+            if (!foundTheBook) Console.WriteLine("This book is not in the library");
         }
 
-    }
 
-    internal class Program
-    {
-        static void Main(string[] args)
+        public void ReturnBook(string bookName)
         {
-            Library library = new Library();
+            bool foundTheBook = false;
+            for (int i = 0; i < LibraryList.Count; i++)
+            {
+                if (LibraryList[i].Title.Contains(bookName))
+                {
+                    if (!LibraryList[i].Availability)
+                    {
 
-            // Adding books to the library
-            library.AddBook(new Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565"));
-            library.AddBook(new Book("To Kill a Mockingbird", "Harper Lee", "9780061120084"));
-            library.AddBook(new Book("1984", "George Orwell", "9780451524935"));
+                        LibraryList[i].Availability = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Book '{LibraryList[i].Title}' is not borrowed.");
+                    }
 
-            // Searching and borrowing books
-            Console.WriteLine("Searching and borrowing books...");
-            library.BorrowBook("Gatsby");
-            library.BorrowBook("1984");
-            library.BorrowBook("Harry Potter"); // This book is not in the library
+                }
 
-            // Returning books
-            Console.WriteLine("\nReturning books...");
-            library.ReturnBook("Gatsby");
-            library.ReturnBook("Harry Potter"); // This book is not borrowed
+                foundTheBook = true;
+                break;
+            }
 
-            Console.ReadLine();
+            if (!foundTheBook) Console.WriteLine("This book is not in the library");
+
+        }
+
+        internal class Program
+        {
+            static void Main(string[] args)
+            {
+                Library library = new Library();
+
+                // Adding books to the library
+                library.AddBook(new Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565"));
+                library.AddBook(new Book("To Kill a Mockingbird", "Harper Lee", "9780061120084"));
+                library.AddBook(new Book("1984", "George Orwell", "9780451524935"));
+
+                // Searching and borrowing books
+                Console.WriteLine("Searching and borrowing books...");
+                library.BorrowBook("Gatsby");
+                library.BorrowBook("1984");
+                library.BorrowBook("Harry Potter"); // This book is not in the library
+
+                // Returning books
+                Console.WriteLine("\nReturning books...");
+                library.ReturnBook("Gatsby");
+                library.ReturnBook("Harry Potter"); // This book is not in the library
+
+                Console.ReadLine();
+            }
         }
     }
 }
